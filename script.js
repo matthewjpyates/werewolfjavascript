@@ -170,7 +170,7 @@ function build_user_buttons(search_text=null)
     {
       document.getElementById("chat_id_list").innerHTML = document.getElementById("chat_id_list").innerHTML + 
       "<li><button class=\"add-button\" id=\"change_dist_id_to_"+user.chatid +"\"" +
-      " onclick=\"set_dist_end(\\\""+user.chatid+"\\\",\\\""+user.pubkeyhexstr+"\\\")\" >"+user.chatid+"</button> </li>";
+      " onclick=\"set_dist_end(\\\""+user.chatid+"\\\" , \\\""+user.pubkeyhexstr+"\\\")\" >"+user.chatid+"</button> </li>";
     }
   
   }
