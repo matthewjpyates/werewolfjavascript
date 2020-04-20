@@ -32,7 +32,8 @@ var distant_key;
 var chat_id;
 var dist_pub_key;
 var dist_id;
-
+var message_holder;
+var keys_published;
 // Text Encoder and Decoder to move Strings back and forth to byte arrays
 var text_encoder = new TextEncoder(); // always utf-8
 var text_decoder = new TextDecoder("utf-8");
@@ -221,7 +222,10 @@ function convert_uint8bit_array_to_hex_array(input_key) {
 
 function convert_hex_array_to_uint8bit_array(input_hex_str) {
   var bytes = new Uint8Array(Math.ceil(input_hex_str.length / 2));
-  for (var i = 0; i < bytes.length; i++) bytes[i] = parseInt(input_hex_str.substr(i * 2, 2), 16);
+  for (var i = 0; i < bytes.length; i++) 
+  {
+    bytes[i] = parseInt(input_hex_str.substr(i * 2, 2), 16);
+  }
   return bytes;
 }
 
@@ -238,6 +242,7 @@ function save_keyfile() {
 
 // save the messages
 function save_messages() {
+  download("messages.txt", message_holder);
 
 }
 
@@ -246,7 +251,7 @@ window.onload = function () {
 
   make_new_keys();
   change_chat_id("new_user_number_" + make_uuid_string());
-
+  keys_published = false;
 };
 
 
