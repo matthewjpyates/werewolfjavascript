@@ -220,7 +220,7 @@ function load_messages() {
     "<ul id=\"messages_list\">" +
     "</ul>" +
     "<p>" +
-    "<textarea id=\"message_to_send\" rows=\"4\" cols=\"50\"><textarea>" +
+    "<textarea id=\"message_to_send\" rows=\"4\" cols=\"50\"></textarea>" +
     "<button class=\"add-button\" id=\"send_message\" onclick=\"send_message()\">Send</button>" +
     "</p>"
 
