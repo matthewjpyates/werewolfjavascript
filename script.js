@@ -188,9 +188,9 @@ build_user_buttons(search_text);
 
 // set distant end
 // gets passed in as a hex string need to convert to unsigned 8bit int array
-function set_dist_end(chat_id, pub_key) {
+function set_dist_end(new_chat_id, pub_key) {
   distant_key = convert_hex_array_to_uint8bit_array(pub_key);
-  dist_id =chat_id;
+  dist_id =new_chat_id;
   document.getElementById("chattingtospan").innerHTML = new_chat_id;
 }
 
