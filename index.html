@@ -1,34 +1,37 @@
 <html lang="en">
-	<head>
+
+<head>
 	<title>Werewolf Web Chat</title>
-    <link href="style.css" rel="stylesheet">
-    <script src="script.js" defer></script>
-    <script src="ntru.js" defer></script>
-    <link rel="manifest" href="manifest.webmanifest">
-	</head>
+	<link href="style.css" rel="stylesheet">
+	<script src="script.js" defer></script>
+	<script src="ntru.js" defer></script>
+	<link rel="manifest" href="manifest.webmanifest">
+</head>
+
 <body>
 	<div id="top">
-    <button class="add-button">Add to home screen</button>
-    </div>
-    <div id="todiv">
-	    <p>Chatting to: <span id="chattingtospan">No One</span> 
-	        <button class="add-button" id="changeto" onclick="load_change_dist_end()" >Change</button> 
+		<button class="add-button">Add to home screen</button>
+	</div>
+	<div id="todiv">
+		<p>Chatting to: <span id="chattingtospan">No One</span>
+			<button class="add-button" id="changeto" onclick="load_change_dist_end()">Change</button>
 		</p>
-	    </div>
-	    <div id="fromdiv">
-		    <p>Chatting as: <span id="chattingasspan">No One</span>
-		    <button class="add-button" id="changefrom" onclick="load_change_local_end()">Change </button> </p>
-            </div>
+	</div>
+	<div id="fromdiv">
+		<p>Chatting as: <span id="chattingasspan">No One</span>
+			<button class="add-button" id="changefrom" onclick="load_change_local_end()">Change </button> </p>
+	</div>
 
-	 <div id="download_section" >
-		 <button class="add-button" id="downloadkeys" onclick="save_keyfile()">Save Keyfile</button>
-		 <button class="add-button" id="downloadmessages" onclick="save_messages()">Save Messages</button>
-		 </div>
+	<div id="download_section">
+		<button class="add-button" id="downloadkeys" onclick="save_keyfile()">Save Keyfile</button>
+		<button class="add-button" id="downloadmessages" onclick="save_messages()">Save Messages</button>
+	</div>
 
-	    <div id="status_field"></div>
-    <div id="main">
-	    </div>
+	<div id="status_field"></div>
+	<div id="main">
+	</div>
 
-	   
-	</body>
+
+</body>
+
 </html>
