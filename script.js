@@ -145,6 +145,7 @@ function load_change_dist_end() {
     xmlhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
       distant_end_chat_ids = JSON.parse(this.responseText);
+
       set_status("making buttons")
         build_user_buttons();
         set_status("")
@@ -160,6 +161,8 @@ function load_change_dist_end() {
 function build_user_buttons(search_text=null)
 {
   document.getElementById("chat_id_list").innerHTML = "";
+  console.log(distant_end_chat_ids)
+
   for (let user in distant_end_chat_ids) {
     console.log(user)
     if ((search_text == null) || (search_text != null && user.chatid.toLowerCase().includes(search_text.toLowerCase()) ))
