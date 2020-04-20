@@ -161,6 +161,7 @@ function build_user_buttons(search_text=null)
 {
   document.getElementById("chat_id_list").innerHTML = "";
   for (let user in distant_end_chat_ids) {
+    console.log(user)
     if ((search_text == null) || (search_text != null && user.chatid.toLowerCase().includes(search_text.toLowerCase()) ))
     {
       document.getElementById("chat_id_list").innerHTML = document.getElementById("chat_id_list").innerHTML + 
