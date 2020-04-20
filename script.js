@@ -191,6 +191,7 @@ function set_dist_end(new_chat_id, pub_key) {
   distant_key = convert_hex_array_to_uint8bit_array(pub_key);
   dist_id =new_chat_id;
   document.getElementById("chattingtospan").innerHTML = new_chat_id;
+  load_messages();
 }
 
 
@@ -314,8 +315,9 @@ function save_messages() {
 window.onload = function () {
 
   make_new_keys();
-  change_chat_id("new_user_number_" + make_uuid_string());
+  change_chat_id("newuser" + make_uuid_string());
   keys_published = false;
+  load_change_local_end();
 };
 
 
