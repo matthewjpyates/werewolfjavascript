@@ -140,7 +140,7 @@ function load_change_dist_end() {
     "</ul>";
 
     var xmlhttp = new XMLHttpRequest();
-    var url = get_host() + "/api/pubkeys";
+    var url = "/api/pubkeys";
     
     xmlhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
@@ -151,6 +151,9 @@ function load_change_dist_end() {
 
         }
     };
+
+    xhttp.open("GET", url, true);
+    xhttp.send();
   
 }
 
