@@ -28,16 +28,36 @@ window.addEventListener('beforeinstallprompt', (e) => {
 
 // global varibles to keep track of keys and who we are talking to
 var local_key_pair;
-var distant_key;
 var chat_id;
-var dist_pub_key;
+var distant_key;
 var dist_id;
 var message_holder;
-var keys_published;
+var keys_published = false;
+
 // Text Encoder and Decoder to move Strings back and forth to byte arrays
 var text_encoder = new TextEncoder(); // always utf-8
 var text_decoder = new TextDecoder("utf-8");
 
+
+// holds chat ids
+var distant_end_chat_ids = null;
+
+// tracker for interval runner
+var intervalID = null;
+
+// pulls messages
+function start_pulling_messages()
+{
+  intervalID = window.setInterval(pull_message,1500);
+}
+
+// stops the pulling of messages
+function stop_pulling_messages()
+{
+  if(intervalID != null){
+  clearInterval(intervalID);
+  }
+}
 
 function set_error(error_text) {
   console.error(error_text);
@@ -109,24 +129,58 @@ function get_host() {
 
 // load the dist ends to choose from
 function load_change_dist_end() {
+
+  set_status("pulling user list from server")
+
   document.getElementById("main").innerHTML = "<h3>Choose who to talk to:<h3>" +
     "<p>search:" +
     "<input type=\"text\" id=\"search_text\" oninput=\"search_field_input()\">" +
     "</p>" +
     "<ul id=\"chat_id_list\">" +
-    "</ul>"
+    "</ul>";
+
+    var xmlhttp = new XMLHttpRequest();
+    var url = get_host() + "/api/pubkeys";
+    
+    xmlhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      distant_end_chat_ids = JSON.parse(this.responseText);
+        build_user_buttons();
+        }
+    };
+  
 }
+
+function build_user_buttons(search_text=null)
+{
+  document.getElementById("chat_id_list").innerHTML = "";
+  for (let user in distant_end_chat_ids) {
+    if ((search_text == null) || (search_text != null && user.chatid.toLowerCase().includes(search_text.toLowerCase()) ))
+    {
+      document.getElementById("chat_id_list").innerHTML = document.getElementById("chat_id_list").innerHTML + 
+      "<li><button class=\"add-button\" id=\"change_dist_id_to_"+user.chatid +"\"" +
+      " onclick=\"set_dist_end("+user.chatid+","+user.pubkeyhexstr+")\" >"+user.chatid+"</button> </li>";
+    }
+  
+  }
+ 
+}
+
+
 
 // reduces the size of returned chat ids to only chat ids that contain the string that is in the search textbox
 function search_field_input() {
-
-
+var search_text = document.getElementById("search_text").value; 
+build_user_buttons(search_text);
 }
 
 
 // set distant end
+// gets passed in as a hex string need to convert to unsigned 8bit int array
 function set_dist_end(chat_id, pub_key) {
-
+  distant_key = convert_hex_array_to_uint8bit_array(pub_key);
+  dist_id =chat_id;
+  document.getElementById("chattingtospan").innerHTML = new_chat_id;
 }
 
 
