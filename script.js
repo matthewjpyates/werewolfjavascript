@@ -145,7 +145,10 @@ function load_change_dist_end() {
     xmlhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
       distant_end_chat_ids = JSON.parse(this.responseText);
+      set_status("making buttons")
         build_user_buttons();
+        set_status("")
+
         }
     };
   
