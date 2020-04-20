@@ -152,8 +152,8 @@ function load_change_dist_end() {
         }
     };
 
-    xhttp.open("GET", url, true);
-    xhttp.send();
+    xmlhttp.open("GET", url, true);
+    xmlhttp.send();
   
 }
 
