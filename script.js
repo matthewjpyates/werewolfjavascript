@@ -274,10 +274,10 @@ function download(filename, text) {
 
 function convert_uint8bit_array_to_hex_array(input_key) {
   output_hex_str = ""
-
-  for (let val in input_key) {
+  for (var ii = 0; ii < input_key.length; ii++) 
+  {
     // operation
-    output_hex_str = output_hex_str + val.toString(16);
+    output_hex_str = output_hex_str + input_key[ii].toString(16);
   }
   return output_hex_str;
 
