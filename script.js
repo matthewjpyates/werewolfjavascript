@@ -32,6 +32,7 @@ var chat_id;
 var distant_key;
 var dist_id;
 var message_holder;
+var token;
 var keys_published = false;
 
 // Text Encoder and Decoder to move Strings back and forth to byte arrays
@@ -230,6 +231,13 @@ function load_messages() {
 function change_chat_id_and_publish() {
   change_chat_id(document.getElementById("chat_id_local_user").value)
   // TODO add the publishing part
+}
+
+// sends the value of local_key_pair.publicKey and chat_id to the server
+// gets a token in the process
+function publish_keys()
+{
+
 }
 
 // from https://gist.github.com/6174/6062387
