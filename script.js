@@ -222,9 +222,7 @@ function load_messages() {
     "<p>" +
     "<textarea id=\"message_to_send\" rows=\"4\" cols=\"50\"></textarea>" +
     "<button class=\"add-button\" id=\"send_message\" onclick=\"send_message()\">Send</button>" +
-    "</p>"
-
-
+    "</p>";
 }
 
 
