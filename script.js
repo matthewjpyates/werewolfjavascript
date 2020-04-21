@@ -298,6 +298,8 @@ function convert_hex_array_to_uint8bit_array(input_hex_str) {
 // save the keyfile
 // private key, public key, chatid
 function save_keyfile() {
+
+  console.log(local_key_pair)
   var text_to_be_saved = convert_uint8bit_array_to_hex_array(local_key_pair.privateKey) + "," + convert_uint8bit_array_to_hex_array(local_key_pair.publicKey) + "," + chat_id;
   download("werewolfchat.keys", text_to_be_saved);
 }
