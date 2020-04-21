@@ -241,9 +241,8 @@ function make_uuid_string() {
 function make_new_keys() {
 
   set_status("Generating Keys");
-
-  local_key_pair = ntru.keyPair();
-  console.log(local_key_pair);
+  (async () => { local_key_pair = await ntru.keyPair(); })();
+  //console.log(local_key_pair);
   set_status("Keys Generated");
 
 }
