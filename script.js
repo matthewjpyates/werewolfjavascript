@@ -243,7 +243,7 @@ function make_new_keys() {
   set_status("Generating Keys");
 
   local_key_pair = ntru.keyPair();
-
+  console.log(local_key_pair);
   set_status("Keys Generated");
 
 }
