@@ -254,7 +254,10 @@ function change_chat_id(new_chat_id) {
 
 
 // changes the chat id of the local user and sends to the server
-function load_keys() {
+function load_keys()
+{
+
+
 
 }
 
@@ -271,8 +274,8 @@ function download(filename, text) {
   document.body.removeChild(element);
 }
 
-function convert_uint8bit_array_to_hex_array(input_key) {
-
+function convert_uint8bit_array_to_hex_array(input_key) 
+{
   output_hex_str = ""
   for (var ii = 0; ii < input_key.length; ii++) 
   {
@@ -280,10 +283,10 @@ function convert_uint8bit_array_to_hex_array(input_key) {
     output_hex_str = output_hex_str + input_key[ii].toString(16);
   }
   return output_hex_str;
-
 }
 
-function convert_hex_array_to_uint8bit_array(input_hex_str) {
+function convert_hex_array_to_uint8bit_array(input_hex_str)
+{
   var bytes = new Uint8Array(Math.ceil(input_hex_str.length / 2));
   for (var i = 0; i < bytes.length; i++) 
   {
