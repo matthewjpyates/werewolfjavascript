@@ -47,16 +47,14 @@ var distant_end_chat_ids = null;
 var intervalID = null;
 
 // pulls messages
-function start_pulling_messages()
-{
-  intervalID = window.setInterval(pull_message,1500);
+function start_pulling_messages() {
+  intervalID = window.setInterval(pull_message, 1500);
 }
 
 // stops the pulling of messages
-function stop_pulling_messages()
-{
-  if(intervalID != null){
-  clearInterval(intervalID);
+function stop_pulling_messages() {
+  if (intervalID != null) {
+    clearInterval(intervalID);
   }
 }
 
@@ -127,6 +125,24 @@ function get_host() {
   return window.location.hostname;
 }
 
+// write a wrapper to abstract the ajax
+function ajax_wapper(url, good_result_func, bad_result_func) {
+  var xmlhttp = new XMLHttpRequest();
+
+
+  xmlhttp.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      good_result_func(this);
+    }
+    else {
+      bad_result_func(this);
+    }
+  };
+
+  xmlhttp.open("GET", url, true);
+  xmlhttp.send();
+}
+
 
 // load the dist ends to choose from
 function load_change_dist_end() {
@@ -140,49 +156,56 @@ function load_change_dist_end() {
     "<ul id=\"chat_id_list\">" +
     "</ul>";
 
-    var xmlhttp = new XMLHttpRequest();
-    var url = "/api/pubkeys";
-    
-    xmlhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-      distant_end_chat_ids = JSON.parse(this.responseText);
+  ajax_wapper("/api/pubkeys", function (data) {
+    distant_end_chat_ids = JSON.parse(data.responseText);
+    set_status("making buttons");
+    build_user_buttons();
+    set_status("");
+  }, function (data) {
+    set_error("Recived error code " + data.status + " when trying to fetch /api/pubkeys");
+   });
 
-      set_status("making buttons")
-        build_user_buttons();
-        set_status("")
+  //var xmlhttp = new XMLHttpRequest();
+  //var url = "/api/pubkeys";
 
-        }
-    };
+  //xmlhttp.onreadystatechange = function () {
+  //  if (this.readyState == 4 && this.status == 200) {
+  //    distant_end_chat_ids = JSON.parse(this.responseText);
 
-    xmlhttp.open("GET", url, true);
-    xmlhttp.send();
-  
+  //    set_status("making buttons");
+  //    build_user_buttons();
+  //    set_status("");
+
+  //  }
+  //};
+
+  //xmlhttp.open("GET", url, true);
+  //xmlhttp.send();
+
 }
 
-function build_user_buttons(search_text=null)
-{
+function build_user_buttons(search_text = null) {
   document.getElementById("chat_id_list").innerHTML = "";
   //console.log(distant_end_chat_ids)
 
-  for ( var ii =0; ii < distant_end_chat_ids.length; ii++) {
-    var user  = distant_end_chat_ids[ii];
-    if ((search_text == null) || (search_text != null && user.chatid.toLowerCase().includes(search_text.toLowerCase()) ))
-    {
-      document.getElementById("chat_id_list").innerHTML = document.getElementById("chat_id_list").innerHTML + 
-      "<li><button class=\"add-button\" id=\"change_dist_id_to_"+user.chatid +"\"" +
-      " onclick=\"set_dist_end(\'"+user.chatid+"\' , \'"+user.pubkeyhexstr+"\')\" >"+user.chatid+"</button> </li>";
+  for (var ii = 0; ii < distant_end_chat_ids.length; ii++) {
+    var user = distant_end_chat_ids[ii];
+    if ((search_text == null) || (search_text != null && user.chatid.toLowerCase().includes(search_text.toLowerCase()))) {
+      document.getElementById("chat_id_list").innerHTML = document.getElementById("chat_id_list").innerHTML +
+        "<li><button class=\"add-button\" id=\"change_dist_id_to_" + user.chatid + "\"" +
+        " onclick=\"set_dist_end(\'" + user.chatid + "\' , \'" + user.pubkeyhexstr + "\')\" >" + user.chatid + "</button> </li>";
     }
-  
+
   }
- 
+
 }
 
 
 
 // reduces the size of returned chat ids to only chat ids that contain the string that is in the search textbox
 function search_field_input() {
-var search_text = document.getElementById("search_text").value; 
-build_user_buttons(search_text);
+  var search_text = document.getElementById("search_text").value;
+  build_user_buttons(search_text);
 }
 
 
@@ -190,7 +213,7 @@ build_user_buttons(search_text);
 // gets passed in as a hex string need to convert to unsigned 8bit int array
 function set_dist_end(new_chat_id, pub_key) {
   distant_key = convert_hex_array_to_uint8bit_array(pub_key);
-  dist_id =new_chat_id;
+  dist_id = new_chat_id;
   document.getElementById("chattingtospan").innerHTML = new_chat_id;
   load_messages();
 }
@@ -235,10 +258,15 @@ function change_chat_id_and_publish() {
 
 // sends the value of local_key_pair.publicKey and chat_id to the server
 // gets a token in the process
-function publish_keys()
-{
+function publish_keys() {
 
 }
+
+// /publishpubkey/:chatid/:pubkeystring
+function makeGetStringForPublishingKey(serverUrl, String user, String key) {
+  return serverUrl + "publishpubkey/" + user + "/" + key;
+}
+
 
 // from https://gist.github.com/6174/6062387
 function make_uuid_string() {
@@ -262,8 +290,7 @@ function change_chat_id(new_chat_id) {
 
 
 // changes the chat id of the local user and sends to the server
-function load_keys()
-{
+function load_keys() {
 
 
 
@@ -282,26 +309,23 @@ function download(filename, text) {
   document.body.removeChild(element);
 }
 
-function convert_uint8bit_array_to_hex_array(input_key) 
-{
+function convert_uint8bit_array_to_hex_array(input_key) {
   output_hex_str = ""
-  for (var ii = 0; ii < input_key.length; ii++) 
-  {
+  for (var ii = 0; ii < input_key.length; ii++) {
     // operation
     output_hex_str = output_hex_str + input_key[ii].toString(16);
   }
   return output_hex_str;
 }
 
-function convert_hex_array_to_uint8bit_array(input_hex_str)
-{
+function convert_hex_array_to_uint8bit_array(input_hex_str) {
   var bytes = new Uint8Array(Math.ceil(input_hex_str.length / 2));
-  for (var i = 0; i < bytes.length; i++) 
-  {
+  for (var i = 0; i < bytes.length; i++) {
     bytes[i] = parseInt(input_hex_str.substr(i * 2, 2), 16);
   }
   return bytes;
 }
+
 
 
 
