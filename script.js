@@ -134,7 +134,7 @@ function ajax_wapper(url, good_result_func, bad_result_func) {
     if (this.readyState == 4 && this.status == 200) {
       good_result_func(this);
     }
-    else {
+    else if (this.readyState == 4) {
       bad_result_func(this);
     }
   };
