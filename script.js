@@ -263,9 +263,9 @@ function publish_keys() {
 }
 
 // /publishpubkey/:chatid/:pubkeystring
-function makeGetStringForPublishingKey(serverUrl, String user, String key) {
-  return serverUrl + "publishpubkey/" + user + "/" + key;
-}
+//function makeGetStringForPublishingKey(serverUrl, String user, String key) {
+//  return serverUrl + "publishpubkey/" + user + "/" + key;
+//}
 
 
 // from https://gist.github.com/6174/6062387
