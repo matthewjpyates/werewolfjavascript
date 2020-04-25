@@ -270,7 +270,7 @@ function decrypt(enc_text)
     return decrypted
   }
 
-  const decrypted =  asynchronous_decrypt_wrapper();
+  const decrypted = await  asynchronous_decrypt_wrapper();
   console.log(decrypted);
   return  text_decoder.decode(decrypted);
   
