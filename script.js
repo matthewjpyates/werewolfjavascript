@@ -260,8 +260,8 @@ function decrypt(enc_text)
   var conv_enc_text = convert_hex_array_to_uint8bit_array(enc_text);
 
   const asynchronous_decrypt_wrapper = async () => {
-    const decrypted /*: Uint8Array */ = await ntru.decrypt(conv_enc_text, local_key_pair.privateKey);
-    return decrypted
+    return await ntru.decrypt(conv_enc_text, local_key_pair.privateKey);
+    
   }
 
   const decrypted =   asynchronous_decrypt_wrapper();
