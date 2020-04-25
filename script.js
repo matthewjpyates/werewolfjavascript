@@ -526,10 +526,14 @@ function make_uuid_string() {
 function make_new_keys() {
 
   set_status("Generating Keys");
-  (async () => { local_key_pair = await ntru.keyPair(); })();
+  (async () => { local_key_pair = await ntru.keyPair(); 
+    //set_status("Keys Generated");
+    publish_keys();
+  
+  })();
   //console.log(local_key_pair);
-  set_status("Keys Generated");
-  publish_keys();
+  //set_status("Keys Generated");
+  //publish_keys();
 }
 
 function change_chat_id(new_chat_id) {
