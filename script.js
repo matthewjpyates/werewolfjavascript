@@ -35,6 +35,8 @@ var message_holder;
 var token = null;
 var keys_published = false;
 
+var last_pull_time = null;
+
 // Text Encoder and Decoder to move Strings back and forth to byte arrays
 var text_encoder = new TextEncoder(); // always utf-8
 var text_decoder = new TextDecoder("utf-8");
@@ -166,15 +168,7 @@ function ajax_wapper(url, good_result_func, bad_result_func) {
   xmlhttp.send();
 }
 
-function verify_key_good_result()
-{
 
-}
-
-function verify_key_bad_result()
-{
-
-}
 
 function get_token(follow_on_action)
 {
@@ -321,20 +315,145 @@ function load_messages() {
     "</p>";
 }
 
+// adds one message to display
+function add_message_to_display(toid, fromid, message_str)
+{
+  Document.getElementById("messages_list").innerHTML = Document.getElementById("messages_list").innerHTML + "<li>"+toid+":" +":"+fromid+":"+message_str +"</li>";
+
+}
+
+function add_message_to_holder(toid, fromid, message_str)
+{
+  message_holder.push({
+    "toid": toid,
+    "fromid": fromid ,
+    "message": message_str
+  });
+  add_message_to_display(toid, fromid, message_str);
+}
+
+function time_in_milliseconds()
+{
+  var d = new Date();
+  return d.getTime();
+}
+
+// ///sendmessage/:tochatid/:fromchatid/:messagetosend/:token
+
+function send_message_worker(enc_text, plain_text)
+{
+  ajax_wapper("/api/sendmessage/"+dist_id+"/"+chat_id+"/"+enc_text+"/"+token, 
+  function (data) {
+    var server_text = data.responseText;
+    if(server_text == "success")
+    {
+      add_message_to_holder(dist_id, chat_id, plain_text);
+    }
+    else
+    {
+      set_error("Failed to send");
+    }
+  }, function (data) {
+    set_error("Recived error code " + data.status + " when trying to fetch /api/sendmessage");
+   });
+}
+
+function send_message()
+{
+  var plain_text = document.getElementById("message_to_send").value;
+  var enc_text =   encrypt(document.getElementById("message_to_send").value,distant_key);
+
+  if (token == null){
+    // get a token then send the message 
+    get_token(send_message_worker(enc_text, plain_text));
+  }
+  else
+  {
+    send_message_worker(enc_text, plain_text);
+  }
+}
+
+
+function pull_message_worker()
+{
+  var ajax_string;
+  if(last_pull_time == null)
+  { // // /messages/:chatid/:token
+    ajax_string = "/api/messages/"+chat_id+"/"+token;
+  }
+  else
+  { // // /messagesaftertime/:chatid/:time/:token
+    ajax_string = "/api/messagesaftertime/"+chat_id+"/"+ last_pull_time+"/"+token;
+  }
+
+  ajax_wapper(ajax_string, 
+  function (data) {
+    var message_array = JSON.parse(data.responseText);
+    for(var ii =0; ii < message_array.length; ii++)
+    {
+      
+      add_message_to_holder(message_array[ii]["toid"], message_array[ii]["fromid"], decrypt(message_array[ii]["encmessagehexstr"]));
+    }
+  }, function (data) {
+    set_error("Recived error code " + data.status + " when trying to fetch messages");
+   });
+
+}
+
+function pull_message()
+{
+  if (token == null){
+    // get a token then send the message 
+    get_token(send_message_worker(enc_text, plain_text));
+  }
+  else
+  {
+    send_message_worker(enc_text, plain_text);
+  }
+
+}
+
+
+// /changechatid/:oldchatid/:newchatid/:token
+function change_chat_id_worker(new_chat_id)
+{
+
+  ajax_wapper("/changechatid/"+chat_id+"/"+new_chat_id+"/"+token, function (data) {
+    var server_text = data.responseText;
+    if(server_text == "chatid changed")
+    {
+      set_status("Changed chat id from "+chat_id + " to " + new_chat_id);
+      change_chat_id(new_chat_id);
+    }
+    else if(server_text == "bad server token")
+    {
+      set_error("Failed changing chat id, bad server token");
+    }
+    else
+    {
+      set_error("Failed changing chat id");
+      console.error(server_text);
+    }
+  
+  }, function (data) {
+    set_error("Recived error code " + data.status + " when trying to fetch /api/changechatid/");
+   });
+
+}
+
 
 // changes the chat id of the local user and sends to the server
 function change_chat_id_and_publish() {
-  change_chat_id(document.getElementById("chat_id_local_user").value)
-  // TODO add the publishing part
+  var new_chat_id = document.getElementById("chat_id_local_user").value;
 
-  ajax_wapper("/api/pubkeys", function (data) {
-    distant_end_chat_ids = JSON.parse(data.responseText);
-    set_status("making buttons");
-    build_user_buttons();
-    set_status("");
-  }, function (data) {
-    set_error("Recived error code " + data.status + " when trying to fetch /api/pubkeys");
-   });
+  if (token == null){
+    // get a token then change chat id
+    get_token(change_chat_id_worker(new_chat_id));
+  }
+  else
+  {
+    change_chat_id_worker(new_chat_id);
+  }
 }
 
 // sends the value of local_key_pair.publicKey and chat_id to the server
@@ -474,7 +593,8 @@ function save_keyfile() {
 
 // save the messages
 function save_messages() {
-  download("messages.txt", message_holder);
+  var millis = time_in_milliseconds();
+  download("messages_"+millis+"_.txt", message_holder);
 
 }
 
