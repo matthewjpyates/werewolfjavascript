@@ -290,7 +290,7 @@ function load_change_local_end() {
   document.getElementById("main").innerHTML = "<h3>Change your chat id, generate new keys, or load offline keys:<h3>" +
     "<h4>Note your keys will be created locally in your browser, your private key will not be set to the server</h4>" +
     "<p>Chat Id:" +
-    "<input type=\"text\" id=\"chat_id_local_user\" oninput=\"search_field_input()\">" +
+    "<input type=\"text\" id=\"chat_id_local_user\" >" +
     "<button class=\"add-button\" id=\"change_local_chat_id\" onclick=\"change_chat_id_and_publish()\" >Change Chat ID</button>  </p>" +
     "<p>Keys: " +
     "<span id=\"key_status_span\"> </span>" +
@@ -318,8 +318,7 @@ function load_messages() {
 // adds one message to display
 function add_message_to_display(toid, fromid, message_str)
 {
-  Document.getElementById("messages_list").innerHTML = Document.getElementById("messages_list").innerHTML + "<li>"+toid+":" +":"+fromid+":"+message_str +"</li>";
-
+  Document.getElementById("messages_list").innerHTML = Document.getElementById("messages_list").innerHTML + "<li>"+toid+":"+fromid+":"+message_str +"</li>";
 }
 
 function add_message_to_holder(toid, fromid, message_str)
