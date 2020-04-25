@@ -272,7 +272,10 @@ function decrypt(enc_text)
     
   }
 
-  console.log(text_decoder.decode(asynchronous_decrypt_wrapper_test()));
+var temp = asynchronous_decrypt_wrapper_test();
+
+console.log(temp);
+  console.log(text_decoder.decode(temp));
 
 
   const asynchronous_decrypt_wrapper = async () => {
