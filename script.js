@@ -250,12 +250,28 @@ function build_user_buttons(search_text = null) {
 
 }
 
+
+const asynchronous_decrypt_wrapper = async (encrypted) => {
+  const decrypted /*: Uint8Array */ =
+		await ntru.decrypt(encrypted, keyPair.privateKey)
+  return decrypted
+}
+
+
 // takes encrypted hex string converts it to a 8bit array, decrypts, converts it back to a string
 function decrypt(enc_text)
 { 
   var output;
   var conv_enc_text = convert_hex_array_to_uint8bit_array(enc_text);
-  var decrypted =  ntru.decrypt(conv_enc_text, local_key_pair.privateKey);
+
+  const asynchronous_decrypt_wrapper = async () => {
+    const decrypted /*: Uint8Array */ =
+      await ntru.decrypt(conv_enc_text, keyPair.privateKey)
+    return decrypted
+  }
+
+  const decrypted =  asynchronous_decrypt_wrapper();
+  console.log(decrypted);
   return  text_decoder.decode(decrypted);
   
 
