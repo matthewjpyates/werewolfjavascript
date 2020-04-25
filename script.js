@@ -266,7 +266,7 @@ function decrypt(enc_text)
 
   const asynchronous_decrypt_wrapper = async () => {
     const decrypted /*: Uint8Array */ =
-      await ntru.decrypt(conv_enc_text, keyPair.privateKey)
+      await ntru.decrypt(conv_enc_text, local_key_pair.privateKey)
     return decrypted
   }
 
