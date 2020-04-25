@@ -259,6 +259,22 @@ function decrypt(enc_text)
   var output;
   var conv_enc_text = convert_hex_array_to_uint8bit_array(enc_text);
 
+  const asynchronous_encrypt_wrapper_test = async () => {
+    return await ntru.encrypt(text_encoder.encode("test"), local_key_pair.publicKey);
+    
+  }
+  
+  var test_enc = asynchronous_encrypt_wrapper_test();
+
+
+  const asynchronous_decrypt_wrapper_test = async () => {
+    return await ntru.decrypt(test_enc, local_key_pair.privateKey);
+    
+  }
+
+  console.log(text_decoder.decode(asynchronous_decrypt_wrapper_test()));
+
+
   const asynchronous_decrypt_wrapper = async () => {
     return await ntru.decrypt(conv_enc_text, local_key_pair.privateKey);
     
