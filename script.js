@@ -255,7 +255,8 @@ function decrypt(enc_text)
 { 
   var output;
   var conv_enc_text = convert_hex_array_to_uint8bit_array(enc_text);
-  return  text_decoder.decode(ntru.decrypt(conv_enc_text, local_key_pair.privateKey));
+  var decrypted =  ntru.decrypt(conv_enc_text, local_key_pair.privateKey);
+  return  text_decoder.decode(decrypted);
   
 
   
