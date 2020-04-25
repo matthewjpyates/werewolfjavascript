@@ -529,7 +529,7 @@ function make_new_keys() {
   (async () => { local_key_pair = await ntru.keyPair(); })();
   //console.log(local_key_pair);
   set_status("Keys Generated");
-
+  publish_keys();
 }
 
 function change_chat_id(new_chat_id) {
