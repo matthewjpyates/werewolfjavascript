@@ -265,6 +265,7 @@ function decrypt(enc_text)
   }
   
   var test_enc = asynchronous_encrypt_wrapper_test();
+  console.log(test_enc);
 
 
   const asynchronous_decrypt_wrapper_test = async () => {
