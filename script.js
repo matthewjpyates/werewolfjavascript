@@ -417,7 +417,7 @@ function pull_message()
 function change_chat_id_worker(new_chat_id)
 {
 
-  ajax_wapper("/changechatid/"+chat_id+"/"+new_chat_id+"/"+token, function (data) {
+  ajax_wapper("/api/changechatid/"+chat_id+"/"+new_chat_id+"/"+token, function (data) {
     var server_text = data.responseText;
     if(server_text == "chatid changed")
     {
