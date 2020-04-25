@@ -255,8 +255,10 @@ function decrypt(enc_text)
 { 
   var output;
   var conv_enc_text = convert_hex_array_to_uint8bit_array(enc_text);
-  (async () =>{ output =   await  ntru.decrypt(conv_enc_text, local_key_pair.privateKey);})();
-  return text_decoder.decode(output);
+  (async () =>{ output =   await  ntru.decrypt(conv_enc_text, local_key_pair.privateKey);
+    return text_decoder.decode(output);
+  })();
+  
 }
 
 // takes a sting and pub key, converts the string to an 8 bit array, encrypts the 8bit array, converys the 8bit array to a hexstring
