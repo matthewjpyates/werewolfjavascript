@@ -32,7 +32,7 @@ var chat_id;
 var distant_key;
 var dist_id;
 var message_holder;
-var token;
+var token = null;
 var keys_published = false;
 
 // Text Encoder and Decoder to move Strings back and forth to byte arrays
@@ -77,9 +77,7 @@ function set_status(status_text) {
 }
 
 
-// stole this from stack overflow
-//document.getElementById('input-file')
-//  .addEventListener('change', getFile)
+
 
 function getFile(event) {
   const input = event.target
@@ -89,15 +87,40 @@ function getFile(event) {
 }
 
 
+    //String should be all caps 24 chars long and with no numbers
+function isStringAGoodTokenString( inputString) {
+
+  if (/^[A-Z]+$/.test(inputString))
+  {
+    if (inputString.length == 24)
+    {
+      return true;
+    }
+    else
+    {
+      set_error("Token recieved from server incorrect length");
+      return false;
+    }
+    
+  }
+  else
+  {
+    set_error("Token recieved from server incorrect format");
+    return false;
+  }
+  }
+
 
 // the key file should be private key, public key, and chat id
 function parseKeyFileContent(file) {
   readFileContent(file).then(content => {
     var parts = content.split(",");
     if (parts.length == 3) {
-      local_key_pair.privateKey = parts[0];
-      local_key_pair.privateKey = parts[1];
+      local_key_pair.privateKey = convert_uint8bit_array_to_hex_array(parts[0]);
+      local_key_pair.privateKey = convert_uint8bit_array_to_hex_array(parts[1]);
       change_chat_id(parts[2]);
+      get_token();
+
     }
     else {
       set_error("The key file is incorrectly formatted");
@@ -143,6 +166,56 @@ function ajax_wapper(url, good_result_func, bad_result_func) {
   xmlhttp.send();
 }
 
+function verify_key_good_result()
+{
+
+}
+
+function verify_key_bad_result()
+{
+
+}
+
+function get_token(follow_on_action)
+{
+  set_status("Getting Authentication Token for " +chat_id );
+  ajax_wapper("/api/gettoken/"+chat_id, function (data) {
+
+    var server_text = data.responseText;
+    if(server_text.startsWith("fail:"))
+    {
+      set_error("Failed to get token from server");
+      console.error(server_text);
+      return;
+    }
+    var parts = server_text.split(":");
+
+    if(parts.length != 2)
+    {
+      set_error("Failed to get token from server");
+      console.error(server_text);
+      return;
+    }
+
+    var enc_token =  parts[1];
+
+    token = decrypt(enc_token);
+    if(! isStringAGoodTokenString( token))
+    {
+      token = null;
+    }
+    else if (follow_on_action === 'function')
+    {
+      follow_on_action();
+    }
+
+
+  }, function (data) {
+    set_error("Recived error code " + data.status + " when trying to fetch /api/gettoken/"+chat_id);
+   });
+  token
+}
+
 
 // load the dist ends to choose from
 function load_change_dist_end() {
@@ -165,23 +238,6 @@ function load_change_dist_end() {
     set_error("Recived error code " + data.status + " when trying to fetch /api/pubkeys");
    });
 
-  //var xmlhttp = new XMLHttpRequest();
-  //var url = "/api/pubkeys";
-
-  //xmlhttp.onreadystatechange = function () {
-  //  if (this.readyState == 4 && this.status == 200) {
-  //    distant_end_chat_ids = JSON.parse(this.responseText);
-
-  //    set_status("making buttons");
-  //    build_user_buttons();
-  //    set_status("");
-
-  //  }
-  //};
-
-  //xmlhttp.open("GET", url, true);
-  //xmlhttp.send();
-
 }
 
 function build_user_buttons(search_text = null) {
@@ -200,6 +256,22 @@ function build_user_buttons(search_text = null) {
 
 }
 
+// takes encrypted hex string converts it to a 8bit array, decrypts, converts it back to a string
+function decrypt(enc_text)
+{ 
+  var output;
+  var conv_enc_text = convert_hex_array_to_uint8bit_array(enc_text);
+  (async () =>{ output =   await  ntru.decrypt(conv_enc_text, local_key_pair.privateKey);})();
+  return text_decoder.decode(output);
+}
+
+// takes a sting and pub key, converts the string to an 8 bit array, encrypts the 8bit array, converys the 8bit array to a hexstring
+function encrypt(plain_text, public_key)
+{
+  var output;
+  (async () =>{ output =   await  ntru.decrypt(text_encoder.encode(plain_text), public_key );})();
+  return convert_uint8bit_array_to_hex_array(output);
+}
 
 
 // reduces the size of returned chat ids to only chat ids that contain the string that is in the search textbox
@@ -254,18 +326,77 @@ function load_messages() {
 function change_chat_id_and_publish() {
   change_chat_id(document.getElementById("chat_id_local_user").value)
   // TODO add the publishing part
+
+  ajax_wapper("/api/pubkeys", function (data) {
+    distant_end_chat_ids = JSON.parse(data.responseText);
+    set_status("making buttons");
+    build_user_buttons();
+    set_status("");
+  }, function (data) {
+    set_error("Recived error code " + data.status + " when trying to fetch /api/pubkeys");
+   });
 }
 
 // sends the value of local_key_pair.publicKey and chat_id to the server
 // gets a token in the process
 function publish_keys() {
 
+  ajax_wapper("/api/publishpubkey/"+chat_id+"/"+convert_uint8bit_array_to_hex_array(local_key_pair.publicKey), function (data) {
+   var  server_text = data.responseText;
+
+    if(server_text.startsWith("good:"))
+    {
+      var parts = server_text.split(":");
+
+      if(parts.length != 2)
+      {
+        set_error("Failed to get token from server");
+        console.error(server_text);
+        return;
+      }
+  
+      var enc_token =  parts[1];
+  
+      token = decrypt(enc_token);
+      if( isStringAGoodTokenString( token))
+      {
+        // send the token back to the server to verifiy key
+            // /verifykey/:chatid/:token
+            ajax_wapper("/api/verifykey/"+chat_id+"/"+token, function (data) {
+              var server_text = data.responseText;
+              if(server_text.startsWith("fail:"))
+              {
+                set_error("failed to verify keys "+ server_text);
+              }
+              else
+              {
+                set_status("Keys published for "+ chat_id);
+              }
+            }, function (data) {
+              set_error("Recived error code " + data.status + " when trying to fetch /api/verifykey/");
+             });
+
+
+      }
+      else
+      {
+        token = null;
+        set_error("Token decryption failed");
+
+      }
+
+    }
+    else if(server_text.startsWith("fail:"))
+    {
+      set_error("Failed to fetch token " + server_text);
+    }
+
+
+  }, function (data) {
+    set_error("Recived error code " + data.status + " when trying to fetch /api/publishpubkey/");
+   });
 }
 
-// /publishpubkey/:chatid/:pubkeystring
-//function makeGetStringForPublishingKey(serverUrl, String user, String key) {
-//  return serverUrl + "publishpubkey/" + user + "/" + key;
-//}
 
 
 // from https://gist.github.com/6174/6062387
@@ -333,8 +464,8 @@ function convert_hex_array_to_uint8bit_array(input_hex_str) {
 // save the keyfile
 // private key, public key, chatid
 function save_keyfile() {
-  console.log(local_key_pair.privateKey)
-  console.log(local_key_pair.publicKey)
+  console.log(local_key_pair.privateKey);
+  console.log(local_key_pair.publicKey);
 
   var text_to_be_saved = convert_uint8bit_array_to_hex_array(local_key_pair.privateKey) + "," + convert_uint8bit_array_to_hex_array(local_key_pair.publicKey) + "," + chat_id;
   download("werewolfchat.keys", text_to_be_saved);
