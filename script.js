@@ -257,6 +257,7 @@ function build_user_buttons(search_text = null) {
 function decrypt(enc_text)
 { 
   var output;
+  console.log(enc_text);
   var conv_enc_text = convert_hex_array_to_uint8bit_array(enc_text);
   console.log(conv_enc_text);
   /*const asynchronous_encrypt_wrapper_test = async () => {
