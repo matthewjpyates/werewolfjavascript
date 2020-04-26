@@ -266,20 +266,27 @@ function decrypt(enc_text)
   
   var test_enc = asynchronous_encrypt_wrapper_test();
   test_enc.then(function(value) {
-    console.log('value: ' + value);
+
+    const asynchronous_decrypt_wrapper_test = async () => {
+      return await ntru.decrypt(value, local_key_pair.privateKey);
+      
+    }
+  
+    var decrypted_test = asynchronous_decrypt_wrapper_test();
+
+    decrypted_test.then(function(value) {
+      console.log(value);
+      console.log(text_decoder.decode(value));
+
+    });
   });
   //console.log(test_enc);
 
 
-  const asynchronous_decrypt_wrapper_test = async () => {
-    return await ntru.decrypt(test_enc, local_key_pair.privateKey);
-    
-  }
 
-var temp = asynchronous_decrypt_wrapper_test();
+//var temp = asynchronous_decrypt_wrapper_test();
 
-console.log(temp);
-  console.log(text_decoder.decode(temp));
+//console.log(temp);
 
 
   const asynchronous_decrypt_wrapper = async () => {
