@@ -510,7 +510,7 @@ function publish_keys() {
     if(server_text.startsWith("good:"))
     {
       console.log(server_text);
-      var parts = server_text.split(":");
+      var parts = server_text.trim().split(":");
 
       if(parts.length != 2)
       {
