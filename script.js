@@ -615,7 +615,7 @@ function convert_uint8bit_array_to_hex_array(input_key) {
     // operation
     output_hex_str = output_hex_str + input_key[ii].toString(16);
   }
-  return output_hex_str;
+  return output_hex_str.toUpperCase();;
 }
 
 function convert_hex_array_to_uint8bit_array(input_hex_str) {
