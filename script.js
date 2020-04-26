@@ -504,7 +504,10 @@ function change_chat_id_and_publish() {
 function publish_keys() {
 
   console.log("/api/publishpubkey/"+chat_id+"/"+convert_uint8bit_array_to_hex_array(local_key_pair.publicKey));
-  ajax_wapper("/api/publishpubkey/"+chat_id+"/"+convert_uint8bit_array_to_hex_array(local_key_pair.publicKey), function (data) {
+  console.log("/api/publishpubkey/"+chat_id+"/"+bytesToHex(local_key_pair.publicKey));
+
+  
+  ajax_wapper("/api/publishpubkey/"+chat_id+"/"+bytesToHex(local_key_pair.publicKey), function (data) {
    var  server_text = data.responseText;
 
     if(server_text.startsWith("good:"))
@@ -626,7 +629,17 @@ function convert_hex_array_to_uint8bit_array(input_hex_str) {
   return bytes;
 }
 
+var HEX_ARRAY = ['0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'];
 
+function bytesToHex( bytes) {
+    var hexChars = [];
+    for (var j = 0; j < bytes.length; j++) {
+        var v = bytes[j] & 0xFF;
+        hexChars[j * 2] = HEX_ARRAY[v >>> 4];
+        hexChars[j * 2 + 1] = HEX_ARRAY[v & 0x0F];
+    }
+    return hexChars.join('');
+}
 
 
 
