@@ -259,7 +259,7 @@ function decrypt(enc_text)
   var output;
   var conv_enc_text = convert_hex_array_to_uint8bit_array(enc_text);
 
-  const asynchronous_encrypt_wrapper_test = async () => {
+  /*const asynchronous_encrypt_wrapper_test = async () => {
     return await ntru.encrypt(text_encoder.encode("test"), local_key_pair.publicKey);
     
   }
@@ -288,18 +288,18 @@ function decrypt(enc_text)
 
 //console.log(temp);
 
-
+*/
   const asynchronous_decrypt_wrapper = async () => {
     return await ntru.decrypt(conv_enc_text, local_key_pair.privateKey);
     
   }
 
   const decrypted =   asynchronous_decrypt_wrapper();
-  console.log(decrypted);
-  return  text_decoder.decode(decrypted);
-  
-
-  
+  decrypted.then(function(value) {
+    console.log(value);
+    return value;
+  });
+  //return  text_decoder.decode(decrypted);
 }
 
 // takes a sting and pub key, converts the string to an 8 bit array, encrypts the 8bit array, converys the 8bit array to a hexstring
