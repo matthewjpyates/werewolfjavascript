@@ -258,7 +258,7 @@ function decrypt(enc_text)
 { 
   var output;
   var conv_enc_text = convert_hex_array_to_uint8bit_array(enc_text);
-
+  console.log(conv_enc_text);
   /*const asynchronous_encrypt_wrapper_test = async () => {
     return await ntru.encrypt(text_encoder.encode("test"), local_key_pair.publicKey);
     
