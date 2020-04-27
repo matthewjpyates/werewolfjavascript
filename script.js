@@ -613,7 +613,7 @@ function download(filename, text) {
 }
 
 function convert_uint8bit_array_to_hex_array(input_key_uint8bit) {
-  var input_key = [].slice.call(uint8Array);
+  var input_key = [].slice.call(input_key_uint8bit);
   output_hex_str = ""
   for (var ii = 0; ii < input_key.length; ii++) {
     // operation
