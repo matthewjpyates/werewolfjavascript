@@ -612,13 +612,14 @@ function download(filename, text) {
   document.body.removeChild(element);
 }
 
-function convert_uint8bit_array_to_hex_array(input_key) {
+function convert_uint8bit_array_to_hex_array(input_key_uint8bit) {
+  var input_key = [].slice.call(uint8Array);
   output_hex_str = ""
   for (var ii = 0; ii < input_key.length; ii++) {
     // operation
     output_hex_str = output_hex_str + input_key[ii].toString(16);
   }
-  return output_hex_str.toUpperCase();;
+  return output_hex_str.toUpperCase();
 }
 
 function convert_hex_array_to_uint8bit_array(input_hex_str) {
