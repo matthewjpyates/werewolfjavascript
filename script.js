@@ -504,7 +504,6 @@ function change_chat_id_and_publish() {
 function publish_keys() {
 
   console.log(local_key_pair.publicKey.toString())
-  toHexString()
   console.log("/api/publishpubkey/"+chat_id+"/"+convert_uint8bit_array_to_hex_array(local_key_pair.publicKey));
   console.log("/api/publishpubkey/"+chat_id+"/"+bytesToHex(local_key_pair.publicKey));
   console.log("/api/publishpubkey/"+chat_id+"/"+toHexString(local_key_pair.publicKey));
