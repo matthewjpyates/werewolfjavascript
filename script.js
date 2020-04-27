@@ -504,11 +504,13 @@ function change_chat_id_and_publish() {
 function publish_keys() {
 
   console.log(local_key_pair.publicKey.toString())
+  toHexString()
   console.log("/api/publishpubkey/"+chat_id+"/"+convert_uint8bit_array_to_hex_array(local_key_pair.publicKey));
   console.log("/api/publishpubkey/"+chat_id+"/"+bytesToHex(local_key_pair.publicKey));
+  console.log("/api/publishpubkey/"+chat_id+"/"+toHexString(local_key_pair.publicKey));
 
   
-  ajax_wapper("/api/publishpubkey/"+chat_id+"/"+convert_uint8bit_array_to_hex_array(local_key_pair.publicKey), function (data) {
+  ajax_wapper("/api/publishpubkey/"+chat_id+"/"+toHexString(local_key_pair.publicKey), function (data) {
    var  server_text = data.responseText;
 
     if(server_text.startsWith("good:"))
@@ -643,10 +645,17 @@ function bytesToHex( inputbytes) {
         hexChars[j * 2 + 1] = HEX_ARRAY[v & 0x0F];
     }
     var output = hexChars.join('');
-    hexChars.reverse();
-    return hexChars.join('');
+    //output.reverse();
+    return output;
 }
 
+function toHexString(byteArrayInput) {
+  var byteArray = [].slice.call(byteArrayInput);
+
+  return Array.from(byteArray, function(byte) {
+    return ('0' + (byte & 0xFF).toString(16)).slice(-2);
+  }).join('').toUpperCase();
+}
 
 
 // save the keyfile
