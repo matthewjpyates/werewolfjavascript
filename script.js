@@ -641,6 +641,8 @@ function bytesToHex( inputbytes) {
         hexChars[j * 2] = HEX_ARRAY[v >>> 4];
         hexChars[j * 2 + 1] = HEX_ARRAY[v & 0x0F];
     }
+    var output = hexChars.join('');
+    hexChars.reverse();
     return hexChars.join('');
 }
 
