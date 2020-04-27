@@ -507,7 +507,7 @@ function publish_keys() {
   console.log("/api/publishpubkey/"+chat_id+"/"+bytesToHex(local_key_pair.publicKey));
 
   
-  ajax_wapper("/api/publishpubkey/"+chat_id+"/"+convert_uint8bit_array_to_hex_array(local_key_pair.publicKey), function (data) {
+  ajax_wapper("/api/publishpubkey/"+chat_id+"/"+bytesToHex(local_key_pair.publicKey), function (data) {
    var  server_text = data.responseText;
 
     if(server_text.startsWith("good:"))
@@ -632,7 +632,9 @@ function convert_hex_array_to_uint8bit_array(input_hex_str) {
 
 var HEX_ARRAY = ['0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'];
 
-function bytesToHex( bytes) {
+function bytesToHex( inputbytes) {
+  var bytes = [].slice.call(inputbytes);
+
     var hexChars = [];
     for (var j = 0; j < bytes.length; j++) {
         var v = bytes[j] & 0xFF;
