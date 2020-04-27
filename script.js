@@ -507,7 +507,7 @@ function publish_keys() {
   console.log("/api/publishpubkey/"+chat_id+"/"+bytesToHex(local_key_pair.publicKey));
 
   
-  ajax_wapper("/api/publishpubkey/"+chat_id+"/"+bytesToHex(local_key_pair.publicKey), function (data) {
+  ajax_wapper("/api/publishpubkey/"+chat_id+"/"+convert_uint8bit_array_to_hex_array(local_key_pair.publicKey), function (data) {
    var  server_text = data.responseText;
 
     if(server_text.startsWith("good:"))
