@@ -534,7 +534,11 @@ function publish_keys() {
   console.log("/api/publishpubkey/"+chat_id+"/"+toHexString(local_key_pair.publicKey));
 */
   
-  ajax_wapper("/api/publishpubkey/"+chat_id+"/043F0800"+toHexString(local_key_pair.publicKey), function (data) {
+  var temp_key = local_key_pair.publicKey;
+  console.log(temp_key);
+  temp_key.splice(0,5);
+  console.log(temp_key);
+  ajax_wapper("/api/publishpubkey/"+chat_id+"/043F0800"+toHexString(temp_key), function (data) {
    var  server_text = data.responseText;
 
     if(server_text.startsWith("good:"))
