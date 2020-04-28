@@ -533,6 +533,7 @@ function publish_keys() {
       console.log(enc_token);
   
       token = decrypt(enc_token);
+      console.log("here")
       if( isStringAGoodTokenString( token))
       {
         // send the token back to the server to verifiy key
