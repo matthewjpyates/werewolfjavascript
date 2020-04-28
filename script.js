@@ -255,7 +255,10 @@ function decrypt(enc_text, follow_on_action)
 
   (async () => { 
     var conv_enc_text = convert_hex_array_to_uint8bit_array(enc_text);
+    console.log("encrypted " +conv_enc_text);
     var plain_text = await ntru.decrypt(conv_enc_text, local_key_pair.privateKey);
+    console.log("decrypted " +plain_text);
+
     follow_on_action(plain_text);
   
   })();
@@ -548,6 +551,7 @@ function publish_keys() {
   
       //token = decrypt(enc_token);
       decrypt(enc_token, function (token){
+        console.log("token is " + token);
 
         if( isStringAGoodTokenString( token))
         {
