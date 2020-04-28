@@ -258,8 +258,10 @@ function decrypt(enc_text, follow_on_action)
     console.log("encrypted " +conv_enc_text);
     var plain_text = await ntru.decrypt(conv_enc_text, local_key_pair.privateKey);
     console.log("decrypted " +plain_text);
+   console.log("decoded plain text "+ text_decoder.decode(plain_text));
 
-    follow_on_action(plain_text);
+    follow_on_action(    text_decoder.decode(plain_text));
+    
   
   })();
 
@@ -268,7 +270,7 @@ function decrypt(enc_text, follow_on_action)
 
 
 // takes encrypted hex string converts it to a 8bit array, decrypts, converts it back to a string
-function decrypt(enc_text)
+/*function decrypt(enc_text)
 { 
   var output;
   console.log(enc_text);
@@ -306,7 +308,7 @@ function decrypt(enc_text)
 
 //console.log(temp);
 
-*/
+
   const asynchronous_decrypt_wrapper = async () => {
     return await ntru.decrypt(conv_enc_text, local_key_pair.privateKey);
     
@@ -319,6 +321,8 @@ function decrypt(enc_text)
   });
   //return  text_decoder.decode(decrypted);
 }
+*/
+
 
 // takes a sting and pub key, converts the string to an 8 bit array, encrypts the 8bit array, converys the 8bit array to a hexstring
 function encrypt(plain_text, public_key)
