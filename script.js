@@ -503,6 +503,7 @@ function change_chat_id_and_publish() {
 // gets a token in the process
 function publish_keys() {
 
+  /*
   console.log("here is the pubkey");
   console.log(local_key_pair.publicKey.toString());
   console.log("here is the privkey");
@@ -510,7 +511,7 @@ function publish_keys() {
   console.log("/api/publishpubkey/"+chat_id+"/"+convert_uint8bit_array_to_hex_array(local_key_pair.publicKey));
   console.log("/api/publishpubkey/"+chat_id+"/"+bytesToHex(local_key_pair.publicKey));
   console.log("/api/publishpubkey/"+chat_id+"/"+toHexString(local_key_pair.publicKey));
-
+*/
   
   ajax_wapper("/api/publishpubkey/"+chat_id+"/043F0800"+toHexString(local_key_pair.publicKey), function (data) {
    var  server_text = data.responseText;
@@ -528,6 +529,8 @@ function publish_keys() {
       }
   
       var enc_token =  parts[1];
+
+      console.log(enc_token);
   
       token = decrypt(enc_token);
       if( isStringAGoodTokenString( token))
