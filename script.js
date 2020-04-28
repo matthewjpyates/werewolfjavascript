@@ -250,6 +250,17 @@ function build_user_buttons(search_text = null) {
 
 }
 
+function decrypt(enc_text, follow_on_action)
+{
+
+  (async () => { 
+    var conv_enc_text = convert_hex_array_to_uint8bit_array(enc_text);
+    var plain_text = await ntru.decrypt(conv_enc_text, local_key_pair.privateKey);
+    follow_on_action(plain_text);
+  
+  })();
+
+}
 
 
 
@@ -260,6 +271,9 @@ function decrypt(enc_text)
   console.log(enc_text);
   var conv_enc_text = convert_hex_array_to_uint8bit_array(enc_text);
   console.log(conv_enc_text);
+
+
+
   /*const asynchronous_encrypt_wrapper_test = async () => {
     return await ntru.encrypt(text_encoder.encode("test"), local_key_pair.publicKey);
     
@@ -532,34 +546,40 @@ function publish_keys() {
 
       console.log(enc_token);
   
-      token = decrypt(enc_token);
+      //token = decrypt(enc_token);
+      decrypt(enc_token, function (token){
+
+        if( isStringAGoodTokenString( token))
+        {
+          // send the token back to the server to verifiy key
+              // /verifykey/:chatid/:token
+              ajax_wapper("/api/verifykey/"+chat_id+"/"+token, function (data) {
+                var server_text = data.responseText;
+                if(server_text.startsWith("fail:"))
+                {
+                  set_error("failed to verify keys "+ server_text);
+                }
+                else
+                {
+                  set_status("Keys published for "+ chat_id);
+                }
+              }, function (data) {
+                set_error("Recived error code " + data.status + " when trying to fetch /api/verifykey/");
+               });
+  
+  
+        }
+        else
+        {
+          token = null;
+          set_error("Token decryption failed");
+  
+        }
+
+
+      });
       console.log("here")
-      if( isStringAGoodTokenString( token))
-      {
-        // send the token back to the server to verifiy key
-            // /verifykey/:chatid/:token
-            ajax_wapper("/api/verifykey/"+chat_id+"/"+token, function (data) {
-              var server_text = data.responseText;
-              if(server_text.startsWith("fail:"))
-              {
-                set_error("failed to verify keys "+ server_text);
-              }
-              else
-              {
-                set_status("Keys published for "+ chat_id);
-              }
-            }, function (data) {
-              set_error("Recived error code " + data.status + " when trying to fetch /api/verifykey/");
-             });
-
-
-      }
-      else
-      {
-        token = null;
-        set_error("Token decryption failed");
-
-      }
+     
 
     }
     else if(server_text.startsWith("fail:"))
@@ -685,8 +705,8 @@ function save_messages() {
 // initiallize the page with a random chat id
 window.onload = function () {
 
-  make_new_keys();
   change_chat_id("newuser" + make_uuid_string());
+  make_new_keys();
   keys_published = false;
   load_change_local_end();
 };
