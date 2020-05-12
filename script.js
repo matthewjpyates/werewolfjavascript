@@ -527,6 +527,8 @@ function publish_keys() {
   
   console.log("here is the pubkey");
   console.log(local_key_pair.publicKey.toString());
+  console.log("here is the privkey");
+  console.log(local_key_pair.privateKey.toString());
  /* console.log("here is the privkey");
   console.log(local_key_pair.privateKey.toString());
   console.log("/api/publishpubkey/"+chat_id+"/"+convert_uint8bit_array_to_hex_array(local_key_pair.publicKey));
