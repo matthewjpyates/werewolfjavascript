@@ -118,8 +118,8 @@ function parseKeyFileContent(file) {
   readFileContent(file).then(content => {
     var parts = content.split(",");
     if (parts.length == 3) {
-      local_key_pair.privateKey = convert_uint8bit_array_to_hex_array(parts[0]);
-      local_key_pair.privateKey = convert_uint8bit_array_to_hex_array(parts[1]);
+      local_key_pair.privateKey = convert_to_javascript_format_from_java(parts[0]);
+      local_key_pair.privateKey = convert_to_javascript_format_from_java(parts[1]);
       change_chat_id(parts[2]);
       get_token();
 
@@ -343,7 +343,7 @@ function search_field_input() {
 // set distant end
 // gets passed in as a hex string need to convert to unsigned 8bit int array
 function set_dist_end(new_chat_id, pub_key) {
-  distant_key = convert_hex_array_to_uint8bit_array(pub_key);
+  distant_key = convert_to_javascript_format_from_java(pub_key);
   dist_id = new_chat_id;
   document.getElementById("chattingtospan").innerHTML = new_chat_id;
   load_messages();
@@ -536,12 +536,15 @@ function publish_keys() {
   console.log("/api/publishpubkey/"+chat_id+"/"+toHexString(local_key_pair.publicKey));
 */
   
-  var temp_key = [].slice.call( local_key_pair.publicKey);
+  //var temp_key = [].slice.call( local_key_pair.publicKey);
+
+  var temp_key  = convert_to_java_format_from_javascript(local_key_pair.publicKey);
  
   console.log(temp_key);
-  temp_key.splice(0,5);
-  console.log(temp_key);
-  ajax_wapper("/api/publishpubkey/"+chat_id+"/043F0800"+toHexString(new Uint8Array(temp_key)), function (data) {
+  //temp_key.splice(0,5);
+  //console.log(temp_key);
+ // ajax_wapper("/api/publishpubkey/"+chat_id+"/043F0800"+toHexString(new Uint8Array(temp_key)), function (data) {
+  ajax_wapper("/api/publishpubkey/"+chat_id+"/"+temp_key, function (data) {
    var  server_text = data.responseText;
 
     if(server_text.startsWith("good:"))
@@ -703,9 +706,9 @@ function toHexString(byteArrayInput) {
 // private key, public key, chatid
 function save_keyfile() {
   console.log(local_key_pair.privateKey);
-  console.log(local_key_pair.publicKey);
+  console.log(local_key_pair.publicKey); 
 
-  var text_to_be_saved = convert_uint8bit_array_to_hex_array(local_key_pair.privateKey) + "," + convert_uint8bit_array_to_hex_array(local_key_pair.publicKey) + "," + chat_id;
+  var text_to_be_saved = convert_to_java_format_from_javascript(local_key_pair.privateKey) + "," + convert_to_java_format_from_javascript(local_key_pair.publicKey) + "," + chat_id;
   download("werewolfchat.keys", text_to_be_saved);
 }
 
@@ -727,3 +730,32 @@ window.onload = function () {
 };
 
 
+function remove_element_from_array_at_index(array, index_to_remove) 
+{
+  const index = array.indexOf(index_to_remove);
+if (index > -1) {
+  array.splice(index, 1);
+}
+return array;
+}
+
+function add_element_to_array_at_index(array, index_to_add_at, value_to_add)
+{
+  if (index > -1) {
+  array.splice(index_to_add_at, 0, value_to_add);
+  }
+  return array;
+}
+
+
+//removes the second byte from the uint8bit and turns to hex array
+function convert_to_java_format_from_javascript(input_array) {
+  return convert_uint8bit_array_to_hex_array(remove_element_from_array(input_array, 1));
+}
+
+
+//converts to uint8bit and adds the value 3 at the 2 postition (index 1)
+function convert_to_javascript_format_from_java(input_string) {
+  return add_element_to_array_at_index(convert_hex_array_to_uint8bit_array(input_string), 1, 3);
+
+}
