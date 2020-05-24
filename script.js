@@ -664,6 +664,8 @@ function convert_uint8bit_array_to_hex_array(input_key_uint8bit) {
   output_hex_str = ""
   for (var ii = 0; ii < input_key.length; ii++) {
     // operation
+    if(input_key[ii]<16)
+    {output_hex_str = output_hex_str + '0';}
     output_hex_str = output_hex_str + input_key[ii].toString(16);
   }
   return output_hex_str.toUpperCase();
