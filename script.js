@@ -750,12 +750,12 @@ function add_element_to_array_at_index(array, index_to_add_at, value_to_add)
 
 //removes the second byte from the uint8bit and turns to hex array
 function convert_to_java_format_from_javascript(input_array) {
-  return convert_uint8bit_array_to_hex_array(remove_element_from_array(input_array, 1));
+  return convert_uint8bit_array_to_hex_array(remove_element_from_array_at_index(input_array, 1));
 }
 
 
 //converts to uint8bit and adds the value 3 at the 2 postition (index 1)
 function convert_to_javascript_format_from_java(input_string) {
-  return add_element_to_array_at_index(convert_hex_array_to_uint8bit_array(input_string), 1, 3);
+  return add_element_to_array_at_index(add_element_to_array_at_index(input_string), 1, 3);
 
 }
