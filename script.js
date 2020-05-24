@@ -742,9 +742,10 @@ return array;
 function add_element_to_array_at_index(array, index_to_add_at, value_to_add)
 {
   if (index > -1) {
-  array.splice(index_to_add_at, 0, value_to_add);
+    var arr = Array.from(array);
+    arr.splice(index_to_add_at, 0, value_to_add);
   }
-  return array;
+  return arr;
 }
 
 
