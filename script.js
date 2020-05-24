@@ -730,21 +730,21 @@ window.onload = function () {
 };
 
 
-function remove_element_from_array_at_index(array, index_to_remove) 
+function remove_element_from_array_at_index(input_array, index_to_remove) 
 {
   const index = array.indexOf(index_to_remove);
 if (index > -1) {
-  var arr = Array.from(array);
+  var arr = Array.from(input_array);
 
   arr.splice(index, 1);
 }
 return arr;
 }
 
-function add_element_to_array_at_index(array, index_to_add_at, value_to_add)
+function add_element_to_array_at_index(input_array, index_to_add_at, value_to_add)
 {
   if (index > -1) {
-    var arr = Array.from(array);
+    var arr = Array.from(input_array);
     arr.splice(index_to_add_at, 0, value_to_add);
   }
   return arr;
