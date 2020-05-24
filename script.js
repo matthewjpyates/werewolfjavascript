@@ -734,9 +734,11 @@ function remove_element_from_array_at_index(array, index_to_remove)
 {
   const index = array.indexOf(index_to_remove);
 if (index > -1) {
-  array.splice(index, 1);
+  var arr = Array.from(array);
+
+  arr.splice(index, 1);
 }
-return array;
+return arr;
 }
 
 function add_element_to_array_at_index(array, index_to_add_at, value_to_add)
