@@ -762,6 +762,6 @@ function convert_to_java_format_from_javascript(input_array) {
 //converts to uint8bit and adds the value 3 at the 2 postition (index 1)
 function convert_to_javascript_format_from_java(input_string) {
   var arr = Array.from(input_string);
-  return add_element_to_array_at_index(add_element_to_array_at_index(arr), 1, 3);
+  return add_element_to_array_at_index(arr, 1, 3);
 
 }
