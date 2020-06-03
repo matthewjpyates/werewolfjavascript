@@ -503,7 +503,7 @@ function pull_message_worker()
       var toChatId = message_array[ii]["toid"];
       var fromChatId = message_array[ii]["fromid"];
 
-      decrypt(message_obj.encmessagehexstr,function(plain_text_message)
+      decrypt(message_array[ii]["encmessagehexstr"],function(plain_text_message)
       {
         add_message_to_holder(toChatId, fromChatId, plain_text_message);
 
