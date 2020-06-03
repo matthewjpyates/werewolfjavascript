@@ -50,7 +50,7 @@ var intervalID = null;
 
 // pulls messages
 function start_pulling_messages() {
-  intervalID = window.setInterval(pull_message, 1500);
+  intervalID = window.setInterval(pull_message_worker, 1500);
 }
 
 // stops the pulling of messages
@@ -475,6 +475,12 @@ function send_message()
 
 function pull_message_worker()
 {
+  console.log("in pull messages");
+  if (token == null){
+    console.log("in pull messages token null");
+
+  return;
+  }
   var ajax_string;
   if(last_pull_time == null)
   { // // /messages/:chatid/:token
@@ -622,6 +628,7 @@ function publish_keys() {
                   console.log("2 global token is " + token); 
 
                   console.log("2 local token is " + input_token);
+                  start_pulling_messages();
                 }
               }, function (data) {
                 set_error("Recived error code " + data.status + " when trying to fetch /api/verifykey/");
