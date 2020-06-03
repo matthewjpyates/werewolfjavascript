@@ -457,11 +457,11 @@ function send_message()
 
     if (token == null){
       // get a token then send the message 
-      get_token(send_message_worker(enc_text, plain_text));
+      get_token(send_message_worker(encrypted_hex, plain_text));
     }
     else
     {
-      send_message_worker(enc_text, plain_text);
+      send_message_worker(encrypted_hex, plain_text);
     }
 
   });
