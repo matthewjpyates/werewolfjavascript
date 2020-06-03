@@ -196,10 +196,12 @@ function get_token(follow_on_action)
     token = decrypt(enc_token);
     if(! isStringAGoodTokenString( token))
     {
+      console.log("token failed with " + token);
       token = null;
     }
     else if (follow_on_action === 'function')
     {
+      console.log("leaving get_token and the token is " + token);
       follow_on_action();
     }
 
@@ -207,7 +209,6 @@ function get_token(follow_on_action)
   }, function (data) {
     set_error("Recived error code " + data.status + " when trying to fetch /api/gettoken/"+chat_id);
    });
-  console.log("leaving get_token and the token is " + token);
 }
 
 
