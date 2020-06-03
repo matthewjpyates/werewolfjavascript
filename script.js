@@ -410,7 +410,7 @@ function load_messages() {
 // adds one message to display
 function add_message_to_display(toid, fromid, message_str)
 {
-  document.getElementById("messages_list").innerHTML = Document.getElementById("messages_list").innerHTML + "<li>"+toid+":"+fromid+":"+message_str +"</li>";
+  document.getElementById("messages_list").innerHTML = document.getElementById("messages_list").innerHTML + "<li>"+toid+":"+fromid+":"+message_str +"</li>";
 }
 
 function add_message_to_holder(toid, fromid, message_str)
