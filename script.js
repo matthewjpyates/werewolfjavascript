@@ -326,13 +326,34 @@ function decrypt(enc_text, follow_on_action)
 
 
 // takes a sting and pub key, converts the string to an 8 bit array, encrypts the 8bit array, converys the 8bit array to a hexstring
-function encrypt(plain_text, public_key)
+/*function encrypt(plain_text, public_key)
 {
   var output;
   (async () =>{ output =   await  ntru.decrypt(text_encoder.encode(plain_text), public_key );
     return convert_uint8bit_array_to_hex_array(output);
 
   })();
+}*/
+
+
+function encrypt(plain_text, follow_on_action)
+{
+//await ntru.encrypt(text_encoder.encode("test"), local_key_pair.publicKey);
+  (async () => { 
+    console.log("plain text " +plain_text);
+    console.log("distant pub key " +distant_key);
+
+    var conv_enc_text = ntru.encrypt(text_encoder.encode(plain_text), distant_key);
+    var temp = convert_uint8bit_array_to_hex_array(conv_enc_text)
+    //convert_hex_array_to_uint8bit_array(enc_text);
+    console.log("encrypted hex array" +temp);
+  
+
+    follow_on_action(temp);
+    
+  
+  })();
+
 }
 
 
@@ -429,19 +450,23 @@ function send_message()
 {
   var plain_text = document.getElementById("message_to_send").value;
   console.log("plain_text is " +plain_text );
-  console.log("distance_key is " +distant_key );
-  var enc_text =   encrypt(document.getElementById("message_to_send").value,distant_key);
+  console.log("distance_key is in send message is" +distant_key );
+  encrypt(document.getElementById("message_to_send").value, function (encrypted_hex){
 
-  console.log("token is " +token );
+    console.log("token is " +token );
 
-  if (token == null){
-    // get a token then send the message 
-    get_token(send_message_worker(enc_text, plain_text));
-  }
-  else
-  {
-    send_message_worker(enc_text, plain_text);
-  }
+    if (token == null){
+      // get a token then send the message 
+      get_token(send_message_worker(enc_text, plain_text));
+    }
+    else
+    {
+      send_message_worker(enc_text, plain_text);
+    }
+
+  });
+
+  
 }
 
 
