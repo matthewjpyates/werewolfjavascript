@@ -341,9 +341,12 @@ function encrypt(plain_text, follow_on_action)
 //await ntru.encrypt(text_encoder.encode("test"), local_key_pair.publicKey);
   (async () => { 
     console.log("plain text " +plain_text);
-    console.log("distant pub key " +distant_key);
+    console.log("distant pub key in hex " +distant_key);
+    var temp_key =     convert_to_javascript_format_from_java(distant_key);
+    console.log("distant pub key as in array " +temp_key);
 
-    var conv_enc_text = await  ntru.encrypt(text_encoder.encode(plain_text), distant_key);
+
+    var conv_enc_text = await  ntru.encrypt(text_encoder.encode(plain_text), temp_key);
     var temp = convert_uint8bit_array_to_hex_array(conv_enc_text)
     //convert_hex_array_to_uint8bit_array(enc_text);
     console.log("encrypted hex array" +temp);
