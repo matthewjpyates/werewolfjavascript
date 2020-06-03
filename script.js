@@ -499,7 +499,7 @@ function pull_message_worker()
       console.log("from server " +Object.keys(message_array[ii]));
       decrypt(message_array[ii]["encmessagehexstr"],function(plain_text_message)
       {
-        add_message_to_holder(message_array[ii]["toid"], message_array[ii]["fromid"], plain_text_message);
+        add_message_to_holder(chat_id, message_array[ii]["fromid"], plain_text_message);
 
       });
       
