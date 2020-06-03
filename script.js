@@ -496,8 +496,13 @@ function pull_message_worker()
     var message_array = JSON.parse(data.responseText);
     for(var ii =0; ii < message_array.length; ii++)
     {
+      decrypt(message_array[ii]["encmessagehexstr"],function(plain_text_message)
+      {
+        add_message_to_holder(message_array[ii]["toid"], message_array[ii]["fromid"], plain_text_message);
+
+      });
       
-      add_message_to_holder(message_array[ii]["toid"], message_array[ii]["fromid"], decrypt(message_array[ii]["encmessagehexstr"]));
+      
     }
   }, function (data) {
     set_error("Recived error code " + data.status + " when trying to fetch messages");
