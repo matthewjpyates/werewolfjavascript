@@ -328,8 +328,10 @@ function decrypt(enc_text, follow_on_action)
 function encrypt(plain_text, public_key)
 {
   var output;
-  (async () =>{ output =   await  ntru.decrypt(text_encoder.encode(plain_text), public_key );})();
-  return convert_uint8bit_array_to_hex_array(output);
+  (async () =>{ output =   await  ntru.decrypt(text_encoder.encode(plain_text), public_key );
+    return convert_uint8bit_array_to_hex_array(output);
+
+  })();
 }
 
 
