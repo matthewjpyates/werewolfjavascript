@@ -342,7 +342,7 @@ function encrypt(plain_text, follow_on_action)
   (async () => { 
     console.log("plain text " +plain_text);
     console.log("distant pub key in hex " +distant_key);
-    var temp_key =     convert_to_java_format_from_javascript(distant_key);
+    var temp_key =     convert_to_javascript_format_from_java(distant_key);
     console.log("distant pub key as in array " +temp_key);
 
 
@@ -803,7 +803,8 @@ function convert_to_java_format_from_javascript(input_array) {
 
 //converts to uint8bit and adds the value 3 at the 2 postition (index 1)
 function convert_to_javascript_format_from_java(input_string) {
-  var arr = Array.from(input_string);
+  var arr = convert_hex_array_to_uint8bit_array(input_string);
+  //var arr = Array.from(input_string);
   return add_element_to_array_at_index(arr, 1, 3);
 
 }
