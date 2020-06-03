@@ -425,6 +425,8 @@ function send_message_worker(enc_text, plain_text)
 function send_message()
 {
   var plain_text = document.getElementById("message_to_send").value;
+  console.log("plain_text is " +plain_text );
+  console.log("distance_key is " +distant_key );
   var enc_text =   encrypt(document.getElementById("message_to_send").value,distant_key);
 
   if (token == null){
