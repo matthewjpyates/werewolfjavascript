@@ -343,7 +343,7 @@ function encrypt(plain_text, follow_on_action)
     console.log("plain text " +plain_text);
     console.log("distant pub key " +distant_key);
 
-    var conv_enc_text = ntru.encrypt(text_encoder.encode(plain_text), distant_key);
+    var conv_enc_text = await  ntru.encrypt(text_encoder.encode(plain_text), distant_key);
     var temp = convert_uint8bit_array_to_hex_array(conv_enc_text)
     //convert_hex_array_to_uint8bit_array(enc_text);
     console.log("encrypted hex array" +temp);
