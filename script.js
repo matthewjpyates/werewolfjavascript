@@ -493,14 +493,19 @@ function pull_message_worker()
 
   ajax_wapper(ajax_string, 
   function (data) {
+    console.log("from server " +data.responseText);
+
     var message_array = JSON.parse(data.responseText);
     for(var ii =0; ii < message_array.length; ii++)
     {
-      var message_obj = JSON.parse(message_array[ii]);
-      console.log("from server " +Object.keys(message_array[ii]));
+     // var message_obj = JSON.parse(message_array[ii]);
+     // console.log("from server " +Object.keys(message_array[ii]));
+      var toChatId = message_array[ii]["toid"];
+      var fromChatId = message_array[ii]["fromid"];
+
       decrypt(message_obj.encmessagehexstr,function(plain_text_message)
       {
-        add_message_to_holder(message_obj.toid, message_obj.fromid, plain_text_message);
+        add_message_to_holder(toChatId, fromChatId, plain_text_message);
 
       });
       
