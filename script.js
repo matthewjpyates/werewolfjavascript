@@ -571,22 +571,29 @@ function publish_keys() {
       console.log(enc_token);
   
       //token = decrypt(enc_token);
-      decrypt(enc_token, function (token){
-        console.log("token is " + token);
+      decrypt(enc_token, function (input_token){
+        console.log("1 global token is " + token); 
 
-        if( isStringAGoodTokenString( token))
+        console.log("1 local token is " + input_token);
+
+        if( isStringAGoodTokenString( input_token))
         {
           // send the token back to the server to verifiy key
               // /verifykey/:chatid/:token
-              ajax_wapper("/api/verifykey/"+chat_id+"/"+token, function (data) {
+              ajax_wapper("/api/verifykey/"+chat_id+"/"+input_token, function (data) {
                 var server_text = data.responseText;
                 if(server_text.startsWith("fail:"))
                 {
                   set_error("failed to verify keys "+ server_text);
+                  token = null;
                 }
                 else
                 {
                   set_status("Keys published for "+ chat_id);
+                  token = input_token;
+                  console.log("2 global token is " + token); 
+
+                  console.log("2 local token is " + input_token);
                 }
               }, function (data) {
                 set_error("Recived error code " + data.status + " when trying to fetch /api/verifykey/");
