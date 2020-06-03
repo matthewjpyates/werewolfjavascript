@@ -207,7 +207,7 @@ function get_token(follow_on_action)
   }, function (data) {
     set_error("Recived error code " + data.status + " when trying to fetch /api/gettoken/"+chat_id);
    });
-  token
+  console.log("leaving get_token and the token is " + token);
 }
 
 
@@ -430,6 +430,8 @@ function send_message()
   console.log("plain_text is " +plain_text );
   console.log("distance_key is " +distant_key );
   var enc_text =   encrypt(document.getElementById("message_to_send").value,distant_key);
+
+  console.log("token is " +token );
 
   if (token == null){
     // get a token then send the message 
