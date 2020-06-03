@@ -496,10 +496,11 @@ function pull_message_worker()
     var message_array = JSON.parse(data.responseText);
     for(var ii =0; ii < message_array.length; ii++)
     {
+      var message_obj = JSON.parse(message_array[ii]);
       console.log("from server " +Object.keys(message_array[ii]));
-      decrypt(message_array[ii]["encmessagehexstr"],function(plain_text_message)
+      decrypt(message_obj.encmessagehexstr,function(plain_text_message)
       {
-        add_message_to_holder(chat_id, message_array[ii]["fromid"], plain_text_message);
+        add_message_to_holder(message_obj.toid, message_obj.fromid, plain_text_message);
 
       });
       
