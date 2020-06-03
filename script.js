@@ -342,7 +342,7 @@ function encrypt(plain_text, follow_on_action)
   (async () => { 
     console.log("plain text " +plain_text);
     console.log("distant pub key in hex " +distant_key);
-    var temp_key =     convert_to_javascript_format_from_java(distant_key);
+    var temp_key =     convert_to_java_format_from_javascript(distant_key);
     console.log("distant pub key as in array " +temp_key);
 
 
