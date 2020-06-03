@@ -31,7 +31,7 @@ var local_key_pair;
 var chat_id;
 var distant_key;
 var dist_id;
-var message_holder;
+var message_holder = [];
 var token = null;
 var keys_published = false;
 
