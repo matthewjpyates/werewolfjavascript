@@ -51,7 +51,7 @@ var intervalID = null;
 // pulls messages
 function start_pulling_messages() {
   intervalID = null;
-  intervalID = window.setInterval(/*pull_message_worker*/
+  intervalID = setInterval(pull_message_worker, 1500)/*
     function ()
     {
 
@@ -98,7 +98,7 @@ function start_pulling_messages() {
 
 }
     
-    , 1500);
+    , 1500);*/
 }
 
 // stops the pulling of messages
@@ -113,7 +113,7 @@ function restart_message_pulling()
   if (intervalID != null) {
     console.log("in restart message");
     clearInterval(intervalID);
-    intervalID = window.setInterval(/*pull_message_worker*/
+    intervalID = setInterval(pull_message_worker, 1500);/*
       function ()
       {
   
@@ -160,7 +160,7 @@ function restart_message_pulling()
   
   }
       
-      , 1500);
+      , 1500);*/
 
   }
 }
