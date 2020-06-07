@@ -121,7 +121,8 @@ function parseKeyFileContent(file) {
       local_key_pair.privateKey = convert_to_javascript_format_from_java(parts[0]);
       local_key_pair.privateKey = convert_to_javascript_format_from_java(parts[1]);
       change_chat_id(parts[2]);
-      get_token();
+      stop_pulling_messages();
+      get_token(function(){ start_pulling_messages();});
 
     }
     else {
