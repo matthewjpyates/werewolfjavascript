@@ -119,7 +119,7 @@ function parseKeyFileContent(file) {
     var parts = content.split(",");
     if (parts.length == 3) {
       local_key_pair.privateKey = convert_to_javascript_format_from_java(parts[0]);
-      local_key_pair.privateKey = convert_to_javascript_format_from_java(parts[1]);
+      local_key_pair.publicKey = convert_to_javascript_format_from_java(parts[1]);
       change_chat_id(parts[2]);
       stop_pulling_messages();
       get_token(function(){ start_pulling_messages();});
