@@ -717,7 +717,7 @@ function make_uuid_string() {
 
 // changes the chat id of the local user and sends to the server
 function make_new_keys() {
-
+  change_chat_id("newuser" + make_uuid_string());
   set_status("Generating Keys");
    (async () => { local_key_pair = await ntru.keyPair(); 
     //set_status("Keys Generated");
