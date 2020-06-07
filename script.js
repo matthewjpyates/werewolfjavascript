@@ -61,6 +61,17 @@ function stop_pulling_messages() {
   }
 }
 
+function restart_message_pulling()
+{
+  if (intervalID != null) {
+    console.log("in restart message");
+    clearInterval(intervalID);
+    intervalID = window.setInterval(pull_message_worker, 1500);
+
+  }
+}
+
+
 function set_error(error_text) {
   console.error(error_text);
   document.getElementById("status_field").innerHTML = error_text;
@@ -123,7 +134,7 @@ function parseKeyFileContent(file) {
       local_key_pair.publicKey = convert_to_javascript_format_from_java(parts[1]);
       change_chat_id(parts[2]);
       //stop_pulling_messages();
-      get_token(/*start_pulling_messages()*/);
+      get_token(restart_message_pulling());
 
     }
     else {
