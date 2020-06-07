@@ -50,6 +50,7 @@ var intervalID = null;
 
 // pulls messages
 function start_pulling_messages() {
+  intervalID = null;
   intervalID = window.setInterval(pull_message_worker, 1500);
 }
 
@@ -122,7 +123,7 @@ function parseKeyFileContent(file) {
       local_key_pair.publicKey = convert_to_javascript_format_from_java(parts[1]);
       change_chat_id(parts[2]);
       stop_pulling_messages();
-      get_token(function(){ start_pulling_messages();});
+      get_token(start_pulling_messages());
 
     }
     else {
