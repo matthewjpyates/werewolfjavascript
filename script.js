@@ -306,7 +306,7 @@ function get_token(follow_on_action)
         console.log("token failed with " + decrypted);
         token = null;
       }
-      else if (follow_on_action === 'function')
+      else 
       {
         token = decrypted;
         console.log("leaving get_token and the token is " + token);
