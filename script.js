@@ -193,17 +193,21 @@ function get_token(follow_on_action)
 
     var enc_token =  parts[1];
 
-    token = decrypt(enc_token);
-    if(! isStringAGoodTokenString( token))
-    {
-      console.log("token failed with " + token);
-      token = null;
-    }
-    else if (follow_on_action === 'function')
-    {
-      console.log("leaving get_token and the token is " + token);
-      follow_on_action();
-    }
+    decrypt(enc_token, function(decrypted){
+      if(! isStringAGoodTokenString( decrypted))
+      {
+        console.log("token failed with " + decrypted);
+        token = null;
+      }
+      else if (follow_on_action === 'function')
+      {
+        token = decrypted;
+        console.log("leaving get_token and the token is " + token);
+        follow_on_action();
+      }
+
+    } );
+
 
 
   }, function (data) {
@@ -269,71 +273,6 @@ function decrypt(enc_text, follow_on_action)
 }
 
 
-
-// takes encrypted hex string converts it to a 8bit array, decrypts, converts it back to a string
-/*function decrypt(enc_text)
-{ 
-  var output;
-  console.log(enc_text);
-  var conv_enc_text = convert_hex_array_to_uint8bit_array(enc_text);
-  console.log(conv_enc_text);
-
-
-
-  /*const asynchronous_encrypt_wrapper_test = async () => {
-    return await ntru.encrypt(text_encoder.encode("test"), local_key_pair.publicKey);
-    
-  }
-  
-  var test_enc = asynchronous_encrypt_wrapper_test();
-  test_enc.then(function(value) {
-
-    const asynchronous_decrypt_wrapper_test = async () => {
-      return await ntru.decrypt(value, local_key_pair.privateKey);
-      
-    }
-  
-    var decrypted_test = asynchronous_decrypt_wrapper_test();
-
-    decrypted_test.then(function(value) {
-      console.log(value);
-      console.log(text_decoder.decode(value));
-
-    });
-  });
-  //console.log(test_enc);
-
-
-
-//var temp = asynchronous_decrypt_wrapper_test();
-
-//console.log(temp);
-
-
-  const asynchronous_decrypt_wrapper = async () => {
-    return await ntru.decrypt(conv_enc_text, local_key_pair.privateKey);
-    
-  }
-
-  const decrypted =   asynchronous_decrypt_wrapper();
-  decrypted.then(function(value) {
-    console.log(value);
-    return value;
-  });
-  //return  text_decoder.decode(decrypted);
-}
-*/
-
-
-// takes a sting and pub key, converts the string to an 8 bit array, encrypts the 8bit array, converys the 8bit array to a hexstring
-/*function encrypt(plain_text, public_key)
-{
-  var output;
-  (async () =>{ output =   await  ntru.decrypt(text_encoder.encode(plain_text), public_key );
-    return convert_uint8bit_array_to_hex_array(output);
-
-  })();
-}*/
 
 
 function encrypt(plain_text, follow_on_action)
@@ -494,7 +433,7 @@ function pull_message_worker()
   ajax_wapper(ajax_string, 
   function (data) {
     console.log("from server " +data.responseText);
-
+    last_pull_time = time_in_milliseconds();
     var message_array = JSON.parse(data.responseText);
     for(var ii =0; ii < message_array.length; ii++)
     {
@@ -517,18 +456,7 @@ function pull_message_worker()
 
 }
 
-function pull_message()
-{
-  if (token == null){
-    // get a token then send the message 
-    get_token(send_message_worker(enc_text, plain_text));
-  }
-  else
-  {
-    send_message_worker(enc_text, plain_text);
-  }
 
-}
 
 
 // /changechatid/:oldchatid/:newchatid/:token
