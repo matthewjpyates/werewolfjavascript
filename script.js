@@ -417,6 +417,7 @@ function send_message()
 function pull_message_worker()
 {
   console.log("in pull messages");
+  console.log("token is "+ token);
   if (token == null){
     console.log("in pull messages token null");
 
