@@ -51,7 +51,54 @@ var intervalID = null;
 // pulls messages
 function start_pulling_messages() {
   intervalID = null;
-  intervalID = window.setInterval(pull_message_worker, 1500);
+  intervalID = window.setInterval(/*pull_message_worker*/
+    function ()
+    {
+
+  console.log("in adhoc pull messages in start pulling messages");
+  console.log("token is "+ token);
+  if (token == null){
+    console.log("in pull messages token null");
+
+  return;
+  }
+  var ajax_string;
+  if(last_pull_time == null)
+  { // // /messages/:chatid/:token
+    ajax_string = "/api/messages/"+chat_id+"/"+token;
+  }
+  else
+  { // // /messagesaftertime/:chatid/:time/:token
+    ajax_string = "/api/messagesaftertime/"+chat_id+"/"+ last_pull_time+"/"+token;
+  }
+
+  ajax_wapper(ajax_string, 
+  function (data) {
+    console.log("from server " +data.responseText);
+    last_pull_time = time_in_milliseconds();
+    var message_array = JSON.parse(data.responseText);
+    for(var ii =0; ii < message_array.length; ii++)
+    {
+     // var message_obj = JSON.parse(message_array[ii]);
+     // console.log("from server " +Object.keys(message_array[ii]));
+      var toChatId = message_array[ii]["toid"];
+      var fromChatId = message_array[ii]["fromid"];
+
+      decrypt(message_array[ii]["encmessagehexstr"],function(plain_text_message)
+      {
+        add_message_to_holder(toChatId, fromChatId, plain_text_message);
+
+      });
+      
+      
+    }
+  }, function (data) {
+    set_error("Recived error code " + data.status + " when trying to fetch messages");
+   });
+
+}
+    
+    , 1500);
 }
 
 // stops the pulling of messages
@@ -66,7 +113,54 @@ function restart_message_pulling()
   if (intervalID != null) {
     console.log("in restart message");
     clearInterval(intervalID);
-    intervalID = window.setInterval(pull_message_worker, 1500);
+    intervalID = window.setInterval(/*pull_message_worker*/
+      function ()
+      {
+  
+    console.log("in adhoc pull messages in start pulling messages");
+    console.log("token is "+ token);
+    if (token == null){
+      console.log("in pull messages token null");
+  
+    return;
+    }
+    var ajax_string;
+    if(last_pull_time == null)
+    { // // /messages/:chatid/:token
+      ajax_string = "/api/messages/"+chat_id+"/"+token;
+    }
+    else
+    { // // /messagesaftertime/:chatid/:time/:token
+      ajax_string = "/api/messagesaftertime/"+chat_id+"/"+ last_pull_time+"/"+token;
+    }
+  
+    ajax_wapper(ajax_string, 
+    function (data) {
+      console.log("from server " +data.responseText);
+      last_pull_time = time_in_milliseconds();
+      var message_array = JSON.parse(data.responseText);
+      for(var ii =0; ii < message_array.length; ii++)
+      {
+       // var message_obj = JSON.parse(message_array[ii]);
+       // console.log("from server " +Object.keys(message_array[ii]));
+        var toChatId = message_array[ii]["toid"];
+        var fromChatId = message_array[ii]["fromid"];
+  
+        decrypt(message_array[ii]["encmessagehexstr"],function(plain_text_message)
+        {
+          add_message_to_holder(toChatId, fromChatId, plain_text_message);
+  
+        });
+        
+        
+      }
+    }, function (data) {
+      set_error("Recived error code " + data.status + " when trying to fetch messages");
+     });
+  
+  }
+      
+      , 1500);
 
   }
 }
