@@ -628,7 +628,8 @@ function publish_keys() {
   //var temp_key = [].slice.call( local_key_pair.publicKey);
 
   var temp_key  = convert_to_java_format_from_javascript(local_key_pair.publicKey);
- 
+  
+  stop_pulling_messages();
   console.log(temp_key);
   //temp_key.splice(0,5);
   //console.log(temp_key);
