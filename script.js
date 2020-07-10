@@ -579,6 +579,9 @@ function change_chat_id_worker(new_chat_id)
     {
       set_status("Changed chat id from "+chat_id + " to " + new_chat_id);
       change_chat_id(new_chat_id);
+      console.log("getting new token, then will start pulling messages again");
+      get_token(function(){start_pulling_messages();});
+      
     }
     else if(server_text == "bad server token")
     {
@@ -600,10 +603,12 @@ function change_chat_id_worker(new_chat_id)
 // changes the chat id of the local user and sends to the server
 function change_chat_id_and_publish() {
   var new_chat_id = document.getElementById("chat_id_local_user").value;
+  console.log("going to stop pulling messages");
+  stop_pulling_messages();  
 
   if (token == null){
     // get a token then change chat id
-    get_token(change_chat_id_worker(new_chat_id));
+    get_token(function(){change_chat_id_worker(new_chat_id);});
   }
   else
   {
