@@ -50,6 +50,7 @@ var intervalID = null;
 
 // pulls messages
 function start_pulling_messages() {
+  last_pull_time == null;
   intervalID = null;
   intervalID = setInterval(pull_message_worker, 1500);/*
     function ()
@@ -575,6 +576,8 @@ function change_chat_id_worker(new_chat_id)
   console.log("/api/changechatid/"+chat_id+"/"+new_chat_id+"/"+token)
   ajax_wapper("/api/changechatid/"+chat_id+"/"+new_chat_id+"/"+token, function (data) {
     var server_text = data.responseText;
+    console.log("from the server in change chat id worker")
+    console.log(server_text);
     if(server_text == "chatid changed")
     {
       set_status("Changed chat id from "+chat_id + " to " + new_chat_id);
