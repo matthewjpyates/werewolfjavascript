@@ -571,6 +571,8 @@ function pull_message_worker()
 function change_chat_id_worker(new_chat_id)
 {
 
+  console.log("line 574 about to change id with this api call")
+  console.log("/api/changechatid/"+chat_id+"/"+new_chat_id+"/"+token)
   ajax_wapper("/api/changechatid/"+chat_id+"/"+new_chat_id+"/"+token, function (data) {
     var server_text = data.responseText;
     if(server_text == "chatid changed")
@@ -629,7 +631,7 @@ function publish_keys() {
 
   var temp_key  = convert_to_java_format_from_javascript(local_key_pair.publicKey);
   
-  stop_pulling_messages();
+  stop_pulling_messages();  
   console.log(temp_key);
   //temp_key.splice(0,5);
   //console.log(temp_key);
