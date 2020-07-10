@@ -578,7 +578,7 @@ function change_chat_id_worker(new_chat_id)
     var server_text = data.responseText;
     console.log("from the server in change chat id worker")
     console.log(server_text);
-    if(server_text == "chatid changed")
+    if(server_text == "success:chatid_changed")
     {
       set_status("Changed chat id from "+chat_id + " to " + new_chat_id);
       change_chat_id(new_chat_id);
